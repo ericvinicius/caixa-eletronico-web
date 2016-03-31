@@ -104,22 +104,23 @@ public class ContaDAO extends MyDao {
 
 	public void efetuaSaque(ContaTO to, BigDecimal valorASerSacado) {
 		criaConexao();
-		try {
 			carregaSaldo(to);
 			BigDecimal saldoAtual = to.getSaldo(); 
-			if (saldoAtual.compareTo(valorASerSacado) == 0 || saldoAtual.compareTo(valorASerSacado) == 1) {
-				saldoAtual = saldoAtual.subtract(valorASerSacado);
-				String SQL = "UPDATE conta SET saldo=:saldo WHERE numero=:numero;";
+		if (saldoAtual.compareTo(valorASerSacado) == 0 || saldoAtual.compareTo(valorASerSacado) == 1) {
+			saldoAtual = saldoAtual.subtract(valorASerSacado);
+			String SQL = "UPDATE conta SET saldo=:saldo WHERE numero=:numero;";
+			try {
 				p.prepareNamedParameterStatement(SQL);
 				p.setInt("numero", to.getNumero());
 				p.setBigDecimal("saldo", saldoAtual);
-				System.out.println("Sacado");
+				p.execute();
 				to.setSaldo(saldoAtual);
-			} else {
-				throw new RuntimeException("Saldo insuficiente");
+				System.out.println("Sacado");
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} else {
+			throw new RuntimeException("Saldo insuficiente");
 		}
 		fechaConexao();
 	}

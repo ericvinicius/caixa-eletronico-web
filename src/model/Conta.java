@@ -157,6 +157,7 @@ public class Conta {
 	public void efetuaSaque(BigDecimal valor) {
 		ContaTO to = new ContaTO(this);
 		dao.efetuaSaque(to, valor);
+		this.saldo = to.getSaldo();
 	}
 
 	@Override
