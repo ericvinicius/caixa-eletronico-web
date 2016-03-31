@@ -12,9 +12,10 @@ public class MyDao {
 	protected Connection connection = null;
 	protected PreparedStatement stm = null;
 	protected ResultSet rs = null;
+	protected NamedParameterStatement p;
 
 	protected void criaConexao(){
-		this.connection = ConnectionFactory.getConnection();
+		p = new NamedParameterStatement(ConnectionFactory.getConnection());
 	}
 
 	protected void fechaConexao(){
@@ -24,6 +25,9 @@ public class MyDao {
 			}
 			if(stm != null){
 				stm.close();
+			}
+			if(p != null){
+				p.close();
 			}
 			if(connection != null){
 				connection.close();
