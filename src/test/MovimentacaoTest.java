@@ -27,7 +27,7 @@ public class MovimentacaoTest {
 	
 	@Test
 	public void testeSalvar(){
-		mTO = new MovimentacaoTO(10000, TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, 10001, LocalDateTime.now());
+		MovimentacaoTO mTO = new MovimentacaoTO(10000, TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, 10001, LocalDateTime.now());
 		Movimentacao mov = new Movimentacao(mTO);
 		mov.salva();
 		Assert.assertNotNull(mov.getId());

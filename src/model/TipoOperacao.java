@@ -2,6 +2,5 @@ package model;
 
 public enum TipoOperacao {
 	ENTRADA,
-	SAIDA,
-	NENHUMA;
+	SAIDA;
 }

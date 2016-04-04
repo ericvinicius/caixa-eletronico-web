@@ -13,42 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * This class is copied from framework-pegasus
- * This class wraps around a {@link PreparedStatement} and allows the
- * programmer to set parameters by name instead
- * of by index.  This eliminates any confusion as to which parameter index
- * represents what.  This also means that
- * rearranging the SQL statement or adding a parameter doesn't involve
- * renumbering your indices.
- * Code such as this:
- * *
- * Connection con=getConnection();
- * String query="select * from my_table where name=? or address=?";
- * PreparedStatement p=con.prepareStatement(query);
- * p.setString(1, "bob");
- * p.setString(2, "123 terrace ct");
- * ResultSet rs=p.executeQuery();
- * *
- * can be replaced with:
- * *
- * Connection con=getConnection();
- * String query="select * from my_table where name=:name or address=:address";
- * NamedParameterStatement p=new NamedParameterStatement(con, query);
- * p.setString("name", "bob");
- * p.setString("address", "123 terrace ct");
- * ResultSet rs=p.executeQuery();
- */
 public class NamedParameterStatement {
-    /**
-     * The statement this object is wrapping.
-     */
     private PreparedStatement statement;
 
-    /**
-     * Maps parameter names to arrays of ints which are the parameter indices.
-     */
     private Map<String, int[]> indexMap;
 
     private String query;
@@ -56,14 +23,6 @@ public class NamedParameterStatement {
 	private Connection connection;
 
 
-    /**
-     * Creates a NamedParameterStatement.  Wraps a call to
-     * c.{@link Connection#prepareStatement(java.lang.String) prepareStatement}.
-     *
-     * @param connection the database connection
-     * @param query      the parameterized query
-     * @throws SQLException if the statement could not be created
-     */
     public NamedParameterStatement(Connection connection){
     	this.setConnection(connection);
     }
@@ -84,9 +43,6 @@ public class NamedParameterStatement {
         this.options = options;
     }
     
-    /*
-	 * Metodo que faz o parse das named queries 
-	 */
     public boolean prepareNamedParameterStatement(String query){
     	try {
 	    	indexMap = new HashMap<String, int[]>();
@@ -120,20 +76,7 @@ public class NamedParameterStatement {
         return options;
     }
 
-    /**
-     * Parses a query with named parameters.  The parameter-index mappings are
-     * put into the map, and the
-     * parsed query is returned.  DO NOT CALL FROM CLIENT CODE.  This
-     * method is non-private so JUnit code can
-     * test it.
-     *
-     * @param query    query to parse
-     * @param paramMap map to hold parameter-index mappings
-     * @return the parsed query
-     */
     static final String parse(String query, Map<String, int[]> paramMap) {
-        // I was originally using regular expressions, but they didn't work well
-        // for ignoring parameter-like strings inside quotes.
         Map<String, List<Integer>> paramMapAux = new HashMap<String, List<Integer>>();
         int length = query.length();
         StringBuffer parsedQuery = new StringBuffer(length);
@@ -179,7 +122,6 @@ public class NamedParameterStatement {
             parsedQuery.append(c);
         }
 
-        // replace the lists of Integer objects with arrays of ints
         for (Map.Entry<String, List<Integer>> entry : paramMapAux.entrySet()) {
             List<Integer> list = entry.getValue();
             int[] indexes = new int[list.size()];
@@ -194,13 +136,6 @@ public class NamedParameterStatement {
     }
 
 
-    /**
-     * Returns the indexes for a parameter.
-     *
-     * @param name parameter name
-     * @return parameter indexes
-     * @throws IllegalArgumentException if the parameter does not exist
-     */
     private int[] getIndexes(String name) {
         int[] indexes = indexMap.get(name);
         if (indexes == null) {

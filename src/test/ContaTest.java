@@ -17,13 +17,13 @@ public class ContaTest {
 
 	@Before
 	public void setUp() throws Exception {
-		conta = new Conta(new ContaTO(Banco.BANCO_DO_BRASIL, 123, 232323, 321, "Eric Vinicius", new BigDecimal("90"), 0));
+		conta = new Conta(new ContaTO(Banco.BANCO_DO_BRASIL, 123, 232323, 321, "Usuario Test", new BigDecimal("90"), 0));
 		conta.salva();
 	}
 	
 	@Test
 	public void testeSalvar() throws Exception {
-		Conta conta2 = new Conta(new ContaTO(Banco.BANCO_DO_BRASIL, 123, 232323, 321, "Eric Vinicius", new BigDecimal("90"), 0));
+		Conta conta2 = new Conta(new ContaTO(Banco.BANCO_DO_BRASIL, 123, 232323, 321, "Usuario Test", new BigDecimal("90"), 0));
 		conta2.salva();
 		Assert.assertNotEquals(null, conta2.getNumero());
 	}

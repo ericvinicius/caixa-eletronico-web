@@ -18,7 +18,7 @@ public class Movimentacao {
 	private TipoMovimentacao tipoMovimentacao;
 	private ContaTO toConta;
 	private LocalDateTime date;
-	private MovimentacaoDAO dao;
+	private MovimentacaoDAO dao = new MovimentacaoDAO();
 	
 	public Movimentacao() {
 	}
@@ -30,6 +30,8 @@ public class Movimentacao {
 	private void colocaAtributos(MovimentacaoTO mTO) {
 		this.id = mTO.getId();
 		this.fromConta = mTO.getFromConta();
+		this.toConta = mTO.getToConta();
+		this.valor = mTO.getValor();
 		this.tipoMovimentacao = mTO.getTipoMovimentacao();
 		this.descricao = mTO.getDescricao();
 		this.tipoOperacao = mTO.getTipoOperacao();
@@ -114,7 +116,7 @@ public class Movimentacao {
 		this.id = mTO.getId();
 	}
 	
-	public List<MovimentacaoTO> getMovimentacoes(ContaTO cTO) {
-		return dao.getMovimentacoes(cTO);
+	public List<MovimentacaoTO> getMovimentacoes(Conta conta) {
+		return dao.getMovimentacoes(new ContaTO(conta));
 	}
 }

@@ -49,8 +49,7 @@ public class MovimentacaoDAO extends MyDao {
 	public List<MovimentacaoTO> getMovimentacoes(ContaTO contaTo) {
 		criaConexao();
 		List<MovimentacaoTO> list = new ArrayList<>();
-		String SQL = "SELECT * FROM movimentacao "
-				+ "WHERE fromNumero=:numero OR toNumero=:numero;";
+		String SQL = "SELECT * FROM movimentacao WHERE fromNumero=:numero OR toNumero=:numero;";
 		p.prepareNamedParameterStatement(SQL);
 		try{
 			p.setInt("numero", contaTo.getNumero());

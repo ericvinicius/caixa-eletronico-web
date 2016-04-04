@@ -149,4 +149,16 @@ public class ContaDAO extends MyDao {
 		}
 		fechaConexao();
 	}
+
+	public void limpaContasDeTest() {
+		criaConexao();
+		String sql = "DELETE FROM conta WHERE titular like '% Test';";
+		p.prepareNamedParameterStatement(sql);
+		try {
+			p.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		fechaConexao();
+	}
 }

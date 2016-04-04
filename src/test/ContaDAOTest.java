@@ -21,13 +21,13 @@ public class ContaDAOTest {
 	@Before
 	public void setUp() throws Exception {
 		dao = new ContaDAO();
-		contaTO = new ContaTO(Banco.BANCO_DO_BRASIL, 123, 232323, 321, "Eric Vinicius", new BigDecimal("90"), 0);
+		contaTO = new ContaTO(Banco.BANCO_DO_BRASIL, 123, 232323, 321, "Usuario Test", new BigDecimal("90"), 0);
 		dao.salva(contaTO);
 	}
 
 	@Test
 	public void testNovaConta() {
-		ContaTO contaTO2 = new ContaTO(Banco.BANCO_DO_BRASIL, 123, 232323, 321, "Eric Vinicius", new BigDecimal("90"), 0);
+		ContaTO contaTO2 = new ContaTO(Banco.BANCO_DO_BRASIL, 123, 232323, 321, "Usuario Test", new BigDecimal("90"), 0);
 		dao.salva(contaTO2);
 		Assert.assertNotEquals(contaTO.getNumero(), null);
 	}

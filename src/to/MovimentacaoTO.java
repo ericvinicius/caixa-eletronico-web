@@ -3,7 +3,6 @@ package to;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import dao.MovimentacaoDAO;
 import model.Movimentacao;
 import model.TipoMovimentacao;
 import model.TipoOperacao;
@@ -17,11 +16,11 @@ public class MovimentacaoTO {
 	private TipoMovimentacao tipoMovimentacao;
 	private ContaTO toConta = new ContaTO();
 	private LocalDateTime date;
-	private MovimentacaoDAO dao = new MovimentacaoDAO();
 
 	public MovimentacaoTO(Movimentacao mov) {
 		this.setId(mov.getId());
 		this.fromConta = mov.getFromConta();
+		this.toConta = mov.getToConta();
 		this.tipoOperacao = mov.getTipoOperacao();
 		this.descricao = mov.getDescricao();
 		this.valor = mov.getValor();

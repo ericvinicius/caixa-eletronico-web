@@ -133,10 +133,11 @@ public class Conta {
 		return dao.excluir(to);
 	}
 
-	public void carrega(){
+	public Conta carrega(){
 		ContaTO to = new ContaTO(this);
 		dao.carrega(to);
 		populaConta(to);
+		return this;
 	}
 	
 	private void populaConta(ContaTO to) {
