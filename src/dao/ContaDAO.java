@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import model.Banco;
+import model.Movimentacao;
 import to.ContaTO;
 
 public class ContaDAO extends MyDao {
@@ -114,6 +115,7 @@ public class ContaDAO extends MyDao {
 				p.setInt("numero", to.getNumero());
 				p.setBigDecimal("saldo", saldoAtual);
 				p.execute();
+				new Movimentacao().deSaque(to, valorASerSacado).salva();
 				to.setSaldo(saldoAtual);
 				System.out.println("Sacado");
 			} catch (SQLException e) {

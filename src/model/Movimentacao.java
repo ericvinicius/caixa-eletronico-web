@@ -110,13 +110,25 @@ public class Movimentacao {
 		return this;
 	}
 	
-	public void salva() {
+	public Movimentacao salva() {
 		MovimentacaoTO mTO = new MovimentacaoTO(this);
 		dao.salva(mTO);
 		this.id = mTO.getId();
+		return this;
 	}
 	
 	public List<MovimentacaoTO> getMovimentacoes(Conta conta) {
 		return dao.getMovimentacoes(new ContaTO(conta));
+	}
+
+	public Movimentacao deSaque(ContaTO to, BigDecimal valorASerSacado) {
+		this.setFromConta(to);
+		this.setValor(valorASerSacado);
+		this.setDate(LocalDateTime.now());
+		this.setDescricao("Saque");
+		this.setTipoOperacao(TipoOperacao.SAIDA);
+		this.setTipoMovimentacao(TipoMovimentacao.SAQUE);
+		this.setToConta(to);
+		return this;
 	}
 }
