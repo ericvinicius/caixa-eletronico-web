@@ -117,7 +117,7 @@ public class Movimentacao {
 		return this;
 	}
 	
-	public List<MovimentacaoTO> getMovimentacoes(Conta conta) {
+	public List<Movimentacao> getMovimentacoes(Conta conta) {
 		return dao.getMovimentacoes(new ContaTO(conta));
 	}
 

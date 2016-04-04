@@ -4,23 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Efetuar Saque</title>
+<title>Cliente Login</title>
 </head>
 <body>
-	<h3>Efetuar Saque</h3>
 	<form action="cliente" method="post">
-		<div>
-			<label>
-				Numero Conta:
-				<input type="text" name="numero" />
-			</label>
-			<label>
-				Valor:
-				<input type="text" name="valor" />
-			</label>
-		</div>
-		
-		<input type="submit" value="Salvar" />
+		<label>
+			Numero Conta:
+			<input type="text" name="numero" />
+		</label>
+		<input type="submit" value="Logar" />
 	</form>
 </body>
 </html>

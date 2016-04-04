@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import to.MovimentacaoTO;
 import model.Conta;
 import model.Movimentacao;
 
@@ -24,23 +22,35 @@ public class ClienteController extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
-		//TODO: Enviar para tela de "login"
+		RequestDispatcher view = request.getRequestDispatcher("cliente-login.jsp");
+		view.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String valorAsString = request.getParameter("valor");
 		Integer numero = Integer.parseInt(request.getParameter("numero"));
-
-		BigDecimal valor = new BigDecimal(valorAsString);
 		Conta conta = new Conta(numero).carrega();
-		conta.efetuaSaque(valor);
-		
-		List<MovimentacaoTO> movimentacoes = new Movimentacao().getMovimentacoes(conta);
+		List<Movimentacao> movimentacoes = new Movimentacao().getMovimentacoes(conta);
 		
 		request.setAttribute("movimentacoes", movimentacoes);
 		request.setAttribute("cliente", conta);
-		RequestDispatcher view = request.getRequestDispatcher("cliente.jsp");
-		view.forward(request, response);
+		
+		String acao = request.getParameter("acao");
+		if(acao == null){
+			MyController.redirectToUser(request, response);
+			return;
+		}
+		
+		try {
+			Class<?> controllerClass = Class.forName("controller."+acao);
+			MyController controller = (MyController) controllerClass.newInstance();
+			controller.action(request, response, conta, movimentacoes);
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Movimentacao;
 import model.TipoMovimentacao;
 import model.TipoOperacao;
 import to.ContaTO;
@@ -46,9 +47,9 @@ public class MovimentacaoDAO extends MyDao {
 		}
 	}
 
-	public List<MovimentacaoTO> getMovimentacoes(ContaTO contaTo) {
+	public List<Movimentacao> getMovimentacoes(ContaTO contaTo) {
 		criaConexao();
-		List<MovimentacaoTO> list = new ArrayList<>();
+		List<Movimentacao> list = new ArrayList<>();
 		String SQL = "SELECT * FROM movimentacao WHERE fromNumero=:numero OR toNumero=:numero;";
 		p.prepareNamedParameterStatement(SQL);
 		try{
@@ -58,8 +59,8 @@ public class MovimentacaoDAO extends MyDao {
 				TipoOperacao tipoOperacao = TipoOperacao.valueOf(rs.getString("tipoOperacao"));
 				TipoMovimentacao tipoMovimentacao = TipoMovimentacao.valueOf(rs.getString("tipoMovimentacao"));
 				LocalDateTime data = rs.getTimestamp("date").toLocalDateTime();
-				list.add(new MovimentacaoTO(rs.getInt("fromNumero"), tipoOperacao, rs.getString("descricao"), 
-						rs.getBigDecimal("valor"), tipoMovimentacao, rs.getInt("toNumero"), data));
+				list.add(new Movimentacao(new MovimentacaoTO(rs.getInt("fromNumero"), tipoOperacao, rs.getString("descricao"), 
+						rs.getBigDecimal("valor"), tipoMovimentacao, rs.getInt("toNumero"), data)));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();

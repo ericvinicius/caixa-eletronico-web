@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import model.Movimentacao;
 import model.TipoMovimentacao;
 import model.TipoOperacao;
 
@@ -36,7 +37,7 @@ public class MovimentacaoDAOTest {
 	
 	@Test
 	public void testBusca() throws Exception {
-		List<MovimentacaoTO> movimentacoes = dao.getMovimentacoes(new ContaTO(10000));
+		List<Movimentacao> movimentacoes = dao.getMovimentacoes(new ContaTO(10000));
 		Assert.assertEquals(movimentacoes.get(0).getDescricao(), mTO.getDescricao());
 	}
 
