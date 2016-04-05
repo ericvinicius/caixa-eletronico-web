@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -10,7 +11,6 @@
 <body>
 	<fieldset>
 		<legend>Dados da Conta</legend>
-		Tamanho das movimentacoes:  ${user.movimentacoes.size()}<br>
 		Numero da Conta:            ${user.conta.numero}<br>
 		Nome:                       ${user.conta.titular}<br>
 		Saldo:                   R$ ${user.conta.saldo}<br>
@@ -22,7 +22,12 @@
 	</fieldset>
 	
 	<fieldset>
-		<legend>Movimentacoes</legend>
+		<legend>Transferencia</legend>
+		<jsp:include page="transferencia.jsp" />
+	</fieldset>
+	<fieldset>
+		<legend>Movimentacoes (${user.movimentacoes.size()})</legend>
+		<jsp:include page="movimentacoes.jsp" />
 	</fieldset>
 	
 	
