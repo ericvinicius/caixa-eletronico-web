@@ -29,19 +29,30 @@ public class MovimentacaoTO {
 		this.date = mov.getDate();
 	}
 
-	public MovimentacaoTO(int fromNumero, TipoOperacao tipoOperacao, String descricao, BigDecimal valor, TipoMovimentacao tipoMovimentacao,
-			int toNumero, LocalDateTime date) {
+	public MovimentacaoTO(Integer id, ContaTO fromConta, TipoOperacao tipoOperacao, String descricao, BigDecimal valor, TipoMovimentacao tipoMovimentacao,
+			ContaTO toConta, LocalDateTime date) {
+		setAttributes(fromConta, tipoOperacao, descricao, valor, tipoMovimentacao, toConta, date, id);
+	}
+
+	private void setAttributes(ContaTO fromConta, TipoOperacao tipoOperacao, String descricao,
+			BigDecimal valor, TipoMovimentacao tipoMovimentacao, ContaTO toConta, LocalDateTime date, Integer id) {
 		this.tipoMovimentacao = tipoMovimentacao;
 		this.tipoOperacao = tipoOperacao;
 		this.descricao = descricao;
 		this.valor = valor;
 		this.date = date;
-		this.fromConta.setNumero(fromNumero);
-		this.toConta.setNumero(toNumero);
+		this.fromConta = fromConta;
+		this.toConta = toConta;
+		this.id = id;
 	}
 
 	public MovimentacaoTO(Integer id) {
 		this.id = id;
+	}
+
+	public MovimentacaoTO(ContaTO fromConta, TipoOperacao tipoOperacao, String descricao, BigDecimal valor, TipoMovimentacao tipoMovimentacao,
+			ContaTO toConta, LocalDateTime date) {
+		setAttributes(fromConta, tipoOperacao, descricao, valor, tipoMovimentacao, toConta, date, null);
 	}
 
 	public Integer getId() {

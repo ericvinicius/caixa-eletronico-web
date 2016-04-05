@@ -131,4 +131,15 @@ public class Movimentacao {
 		this.setToConta(to);
 		return this;
 	}
+
+	public Movimentacao deTransferencia(ContaTO to, ContaTO from, BigDecimal valor) {
+		setFromConta(from);
+		setToConta(to);
+		setValor(valor);
+		setDate(LocalDateTime.now());
+		setDescricao("Transferencia");
+		setTipoOperacao(TipoOperacao.SAIDA);
+		setTipoMovimentacao(TipoMovimentacao.TRANSFERENCIA);
+		return this;
+	}
 }

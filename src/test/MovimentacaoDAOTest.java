@@ -24,13 +24,13 @@ public class MovimentacaoDAOTest {
 	@Before
 	public void setUp() throws Exception {
 		dao = new MovimentacaoDAO();
-		mTO = new MovimentacaoTO(10000, TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, 10001, LocalDateTime.now());
+		mTO = new MovimentacaoTO(new ContaTO(10000), TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, new ContaTO(10001), LocalDateTime.now());
 		dao.salva(mTO);
 	}
 	
 	@Test
 	public void testSalvar() {
-		MovimentacaoTO mov2 = new MovimentacaoTO(10000, TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, 10001, LocalDateTime.now());
+		MovimentacaoTO mov2 = new MovimentacaoTO(new ContaTO(10000), TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, new ContaTO(10001), LocalDateTime.now());
 		dao.salva(mov2);
 		Assert.assertNotNull(mov2.getId());
 	}

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Conta;
 import model.Movimentacao;
 import model.TipoMovimentacao;
 import model.TipoOperacao;
@@ -50,7 +51,7 @@ public class MovimentacaoDAO extends MyDao {
 	public List<Movimentacao> getMovimentacoes(ContaTO contaTo) {
 		criaConexao();
 		List<Movimentacao> list = new ArrayList<>();
-		String SQL = "SELECT * FROM movimentacao WHERE fromNumero=:numero OR toNumero=:numero;";
+		String SQL = "SELECT * FROM movimentacao m where m.toNumero = :numero or m.fromNumero = :numero order by m.id desc;";
 		p.prepareNamedParameterStatement(SQL);
 		try{
 			p.setInt("numero", contaTo.getNumero());
@@ -59,8 +60,11 @@ public class MovimentacaoDAO extends MyDao {
 				TipoOperacao tipoOperacao = TipoOperacao.valueOf(rs.getString("tipoOperacao"));
 				TipoMovimentacao tipoMovimentacao = TipoMovimentacao.valueOf(rs.getString("tipoMovimentacao"));
 				LocalDateTime data = rs.getTimestamp("date").toLocalDateTime();
-				list.add(new Movimentacao(new MovimentacaoTO(rs.getInt("fromNumero"), tipoOperacao, rs.getString("descricao"), 
-						rs.getBigDecimal("valor"), tipoMovimentacao, rs.getInt("toNumero"), data)));
+				Conta toConta = new Conta(rs.getInt("toNumero")).carrega();
+				Conta fromConta = new Conta(rs.getInt("fromNumero")).carrega();
+				MovimentacaoTO movimentacaoTO = new MovimentacaoTO(rs.getInt("id"), new ContaTO(fromConta), tipoOperacao, rs.getString("descricao"), 
+						rs.getBigDecimal("valor"), tipoMovimentacao, new ContaTO(toConta), data);
+				list.add(new Movimentacao(movimentacaoTO));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();

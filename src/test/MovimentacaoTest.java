@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import to.ContaTO;
 import to.MovimentacaoTO;
 
 public class MovimentacaoTest {
@@ -20,14 +21,14 @@ public class MovimentacaoTest {
 
 	@Before
 	public void setUp() throws Exception {
-		mTO = new MovimentacaoTO(10000, TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, 10001, LocalDateTime.now());
+		mTO = new MovimentacaoTO(new ContaTO(10000), TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, new ContaTO(10001), LocalDateTime.now());
 		movimentacao = new Movimentacao(mTO);
 		movimentacao.salva();
 	}
 	
 	@Test
 	public void testeSalvar(){
-		MovimentacaoTO mTO = new MovimentacaoTO(10000, TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, 10001, LocalDateTime.now());
+		MovimentacaoTO mTO = new MovimentacaoTO(new ContaTO(10000), TipoOperacao.ENTRADA, "Movimentacao normal", new BigDecimal("100"), TipoMovimentacao.TRANSFERENCIA, new ContaTO(10001), LocalDateTime.now());
 		Movimentacao mov = new Movimentacao(mTO);
 		mov.salva();
 		Assert.assertNotNull(mov.getId());

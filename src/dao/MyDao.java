@@ -15,7 +15,9 @@ public class MyDao {
 	protected NamedParameterStatement p;
 
 	protected void criaConexao(){
-		p = new NamedParameterStatement(ConnectionFactory.getConnection());
+		if(p == null){
+			p = new NamedParameterStatement(ConnectionFactory.getConnection());
+		}
 	}
 
 	protected void fechaConexao(){

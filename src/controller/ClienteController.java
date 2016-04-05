@@ -24,8 +24,14 @@ public class ClienteController extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher view = request.getRequestDispatcher("cliente-login.jsp");
-		view.forward(request, response);
+		Optional<Usuario> userOfSession = MyController.getUserOfSession(request);
+		if(userOfSession.isPresent()){
+			doPost(request, response);
+		} else {
+			RequestDispatcher view = request.getRequestDispatcher("cliente-login.jsp");
+			view.forward(request, response);
+		}
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
