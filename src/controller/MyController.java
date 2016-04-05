@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,5 +18,15 @@ public abstract class MyController {
 	}
 	
 	protected abstract void action(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws ServletException, IOException;
+
+	public static void saveUserOnRequestAndSession(Usuario usuario, HttpServletRequest request) {
+		request.getSession().setAttribute("user", usuario);
+		request.setAttribute("user", usuario);
+	}
+
+	public static Optional<Usuario> getUserOfSession(HttpServletRequest request) {
+		Usuario user = (Usuario) request.getSession().getAttribute("user");
+		return Optional.ofNullable(user);
+	}
 
 }
