@@ -39,16 +39,15 @@ public class ClienteController extends HttpServlet {
 		Optional<Usuario> usuarioOp = MyController.getUserOfSession(request);
 		if(usuarioOp.isPresent()){
 			Usuario usuario = usuarioOp.get();
-			request.setAttribute("user", usuario);
 			return usuario;
 		}
 		
 		Integer numero = Integer.parseInt(request.getParameter("numero"));
 		Conta conta = new Conta(numero).carrega();
-		List<Movimentacao> movimentacoes = new Movimentacao().getMovimentacoes(conta);
+		List<Movimentacao> movimentacoes = Movimentacao.getMovimentacoes(conta);
 		Usuario usuario = new Usuario(conta, movimentacoes);
 		
-		MyController.saveUserOnRequestAndSession(usuario, request);
+		MyController.saveUserOnSession(usuario, request);
 		return usuario;
 	}
 

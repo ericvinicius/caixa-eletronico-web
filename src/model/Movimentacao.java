@@ -117,8 +117,8 @@ public class Movimentacao {
 		return this;
 	}
 	
-	public List<Movimentacao> getMovimentacoes(Conta conta) {
-		return dao.getMovimentacoes(new ContaTO(conta));
+	public static List<Movimentacao> getMovimentacoes(Conta conta) {
+		return new MovimentacaoDAO().getMovimentacoes(new ContaTO(conta));
 	}
 
 	public Movimentacao deSaque(ContaTO to, BigDecimal valorASerSacado) {

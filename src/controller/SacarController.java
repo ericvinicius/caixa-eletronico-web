@@ -16,7 +16,7 @@ public class SacarController extends MyController {
 		BigDecimal valor = new BigDecimal(request.getParameter("valor"));
 		usuario.getConta().efetuaSaque(valor);
 		
-		saveUserOnRequestAndSession(usuario, request);
+		saveUserOnSession(usuario, request);
 		redirectToUser(request, response);
 	}
 

@@ -27,4 +27,9 @@ public class Usuario {
 	public void setConta(Conta conta) {
 		this.conta = conta;
 	}
+
+	public void carrega() {
+		conta.carrega();
+		this.movimentacoes = Movimentacao.getMovimentacoes(conta);
+	}
 }

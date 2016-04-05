@@ -19,9 +19,9 @@ public abstract class MyController {
 	
 	protected abstract void action(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws ServletException, IOException;
 
-	public static void saveUserOnRequestAndSession(Usuario usuario, HttpServletRequest request) {
+	public static void saveUserOnSession(Usuario usuario, HttpServletRequest request) {
+		usuario.carrega();
 		request.getSession().setAttribute("user", usuario);
-		request.setAttribute("user", usuario);
 	}
 
 	public static Optional<Usuario> getUserOfSession(HttpServletRequest request) {
