@@ -7,6 +7,9 @@ import dao.ContaDAO;
 
 public class Conta {
 
+	public Conta() {
+	}
+
 	private Banco banco;
 	private Integer numero;
 	private Integer agencia;
@@ -24,7 +27,7 @@ public class Conta {
 		this.codAcesso = conta.getCodAcesso();
 		this.titular = conta.getTitular();
 		this.banco = conta.getBanco();
-		this.saldo = conta.getSaldo();
+		this.setSaldo(conta.getSaldo());
 		this.bloqueio = conta.getBloqueio();
 	}
 
@@ -145,7 +148,7 @@ public class Conta {
 		this.agencia = to.getAgencia();
 		this.banco = to.getBanco();
 		this.bloqueio = to.getBloqueio();
-		this.saldo = to.getSaldo();
+		this.setSaldo(to.getSaldo());
 		this.senha = to.getSenha();
 		this.titular = to.getTitular();
 	}
@@ -158,7 +161,7 @@ public class Conta {
 	public void efetuaSaque(BigDecimal valor) {
 		ContaTO to = new ContaTO(this);
 		dao.efetuaSaque(to, valor);
-		this.saldo = to.getSaldo();
+		this.setSaldo(to.getSaldo());
 	}
 
 	@Override
@@ -192,10 +195,10 @@ public class Conta {
 				return false;
 		} else if (!numero.equals(other.numero))
 			return false;
-		if (saldo == null) {
-			if (other.saldo != null)
+		if (getSaldo() == null) {
+			if (other.getSaldo() != null)
 				return false;
-		} else if (!saldo.equals(other.saldo))
+		} else if (!getSaldo().equals(other.getSaldo()))
 			return false;
 		if (senha == null) {
 			if (other.senha != null)

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Conta;
+import model.Usuario;
 import model.Movimentacao;
 
 @WebServlet("/cliente")
@@ -27,24 +28,33 @@ public class ClienteController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Integer numero = Integer.parseInt(request.getParameter("numero"));
-		Conta conta = new Conta(numero).carrega();
-		List<Movimentacao> movimentacoes = new Movimentacao().getMovimentacoes(conta);
+		request.setCharacterEncoding("utf-8");
 		
-		request.setAttribute("movimentacoes", movimentacoes);
-		request.setAttribute("cliente", conta);
-		
+		Usuario usuario = carregaUsuario(request);
 		String acao = request.getParameter("acao");
 		if(acao == null){
 			MyController.redirectToUser(request, response);
 			return;
 		}
 		
+		redirectToController(acao, request, response, usuario);
+	}
+
+	private Usuario carregaUsuario(HttpServletRequest request) {
+		Integer numero = Integer.parseInt(request.getParameter("numero"));
+		Conta conta = new Conta(numero).carrega();
+		List<Movimentacao> movimentacoes = new Movimentacao().getMovimentacoes(conta);
+		
+		Usuario usuario = new Usuario(conta, movimentacoes);
+		request.setAttribute("user", usuario);
+		return usuario;
+	}
+
+	private void redirectToController(String acao, HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws ServletException, IOException {
 		try {
 			Class<?> controllerClass = Class.forName("controller."+acao);
 			MyController controller = (MyController) controllerClass.newInstance();
-			controller.action(request, response, conta, movimentacoes);
-			
+			controller.action(request, response, usuario);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
@@ -52,5 +62,6 @@ public class ClienteController extends HttpServlet {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+		
 	}
 }

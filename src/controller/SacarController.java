@@ -2,24 +2,21 @@ package controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.Conta;
-import model.Movimentacao;
+import model.Usuario;
 
 public class SacarController extends MyController {
 
 	@Override
-	public void action(HttpServletRequest request, HttpServletResponse response, Conta conta,
-			List<Movimentacao> movimentacoes) throws ServletException, IOException {
+	public void action(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws ServletException, IOException {
 		BigDecimal valor = new BigDecimal(request.getParameter("valor"));
-		conta.efetuaSaque(valor);
+		usuario.getConta().efetuaSaque(valor);
 		
-		request.setAttribute("cliente", conta);
+		request.setAttribute("user", usuario);
 		redirectToUser(request, response);
 	}
 
