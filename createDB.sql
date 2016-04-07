@@ -19,7 +19,6 @@ INSERT INTO `caixaEletronico`.`conta` (`banco`, `agencia`, `senha`, `codAcesso`,
 CREATE TABLE `movimentacao` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `fromNumero` int(6) NOT NULL,
-  `tipoOperacao` varchar(20) NOT NULL,
   `descricao` varchar(45) DEFAULT NULL,
   `valor` decimal(19,2) NOT NULL,
   `tipoMovimentacao` varchar(20) NOT NULL,
@@ -27,3 +26,4 @@ CREATE TABLE `movimentacao` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+

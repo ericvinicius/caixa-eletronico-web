@@ -54,7 +54,6 @@ public class ContaDAO extends MyDao {
 			p.prepareNamedParameterStatement(SQL);
 			p.setInt("numero", to.getNumero());
 			p.execute();
-			System.out.println("Excluida");
 			fechaConexao();
 			return true;
 		} catch (SQLException e) {
@@ -117,7 +116,6 @@ public class ContaDAO extends MyDao {
 				p.execute();
 				new Movimentacao().deSaque(to, valorASerSacado).salva();
 				to.setSaldo(saldoAtual);
-				System.out.println("Sacado");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

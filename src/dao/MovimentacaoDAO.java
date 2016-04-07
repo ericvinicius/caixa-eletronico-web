@@ -19,12 +19,11 @@ public class MovimentacaoDAO extends MyDao {
 	public void salva(MovimentacaoTO mTO) {
 		criaConexao();
 		String SQL = "INSERT INTO movimentacao "
-				+ "(fromNumero, tipoOperacao, descricao, valor, tipoMovimentacao, toNumero, date) "
-				+ "VALUES (:fromNumero, :tipoOperacao, :descricao, :valor, :tipoMovimentacao, :toNumero, :date);";
+				+ "(fromNumero, descricao, valor, tipoMovimentacao, toNumero, date) "
+				+ "VALUES (:fromNumero, :descricao, :valor, :tipoMovimentacao, :toNumero, :date);";
 		p.prepareNamedParameterStatement(SQL);
 		try {
 			p.setInt("fromNumero", mTO.getFromConta().getNumero());
-			p.setString("tipoOperacao", mTO.getTipoOperacao().toString());
 			p.setString("descricao", mTO.getDescricao());
 			p.setBigDecimal("valor", mTO.getValor());
 			p.setString("tipoMovimentacao", mTO.getTipoMovimentacao().toString());
@@ -57,11 +56,12 @@ public class MovimentacaoDAO extends MyDao {
 			p.setInt("numero", contaTo.getNumero());
 			ResultSet rs = p.executeQuery();
 			while(rs.next()){
-				TipoOperacao tipoOperacao = TipoOperacao.valueOf(rs.getString("tipoOperacao"));
 				TipoMovimentacao tipoMovimentacao = TipoMovimentacao.valueOf(rs.getString("tipoMovimentacao"));
 				LocalDateTime data = rs.getTimestamp("date").toLocalDateTime();
 				Conta toConta = new Conta(rs.getInt("toNumero")).carrega();
 				Conta fromConta = new Conta(rs.getInt("fromNumero")).carrega();
+				
+				TipoOperacao tipoOperacao = getTipoOpercao(contaTo.getNumero(), toConta.getNumero(), fromConta.getNumero());
 				MovimentacaoTO movimentacaoTO = new MovimentacaoTO(rs.getInt("id"), new ContaTO(fromConta), tipoOperacao, rs.getString("descricao"), 
 						rs.getBigDecimal("valor"), tipoMovimentacao, new ContaTO(toConta), data);
 				list.add(new Movimentacao(movimentacaoTO));
@@ -71,4 +71,13 @@ public class MovimentacaoDAO extends MyDao {
 		}
 		return list;
 	}
+
+	private TipoOperacao getTipoOpercao(Integer numeroAtual, Integer toNumero, Integer fromNumero) {
+		if(numeroAtual == toNumero){
+			return TipoOperacao.ENTRADA;
+		} else { 
+			return TipoOperacao.SAIDA;
+		}
+	}
+
 }
