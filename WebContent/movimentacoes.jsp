@@ -1,7 +1,9 @@
+<link rel="stylesheet" type="text/css" href="./style/css/bootstrap.min.css" >
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <form action="cliente" method="post">
-	<table>
+<div class="table-responsive">
+	<table class="table">
 		<thead>
 			<tr>
 				<th>Id</th>
@@ -27,4 +29,5 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	</div>
 </form>
