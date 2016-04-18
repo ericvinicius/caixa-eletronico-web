@@ -1,5 +1,6 @@
 package dao;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -18,6 +19,10 @@ public class MovimentacaoDAO extends MyDao {
 
 	public void salva(MovimentacaoTO mTO) {
 		criaConexao();
+		boolean saldoAtualizado = atualizaSaldo(mTO);
+		if(!saldoAtualizado){
+			return;
+		}
 		String SQL = "INSERT INTO movimentacao "
 				+ "(fromNumero, descricao, valor, tipoMovimentacao, toNumero, date) "
 				+ "VALUES (:fromNumero, :descricao, :valor, :tipoMovimentacao, :toNumero, :date);";
@@ -38,6 +43,25 @@ public class MovimentacaoDAO extends MyDao {
 		fechaConexao();
 	}
 
+	private boolean atualizaSaldo(MovimentacaoTO mTO) {
+		BigDecimal saldoAtual = mTO.getFromConta().getSaldo();
+		BigDecimal valorDaTransferencia = mTO.getValor();
+		if(mTO.getTipoOperacao().equals(TipoOperacao.SAIDA) && saldoAtual.compareTo(valorDaTransferencia) >= 1){
+			saldoAtual = saldoAtual.subtract(valorDaTransferencia);
+			String SQL = "UPDATE conta SET saldo=:saldo WHERE numero=:numero;";
+			p.prepareNamedParameterStatement(SQL);
+			try {
+				p.setBigDecimal("saldo", saldoAtual);
+				p.setInt("numero", mTO.getFromConta().getNumero());
+				p.execute();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		return false;
+	}
+
 	private void getId(MovimentacaoTO mTO) throws SQLException {
 		String getId = "SELECT id FROM movimentacao ORDER BY id DESC LIMIT 1;";
 		p.prepareNamedParameterStatement(getId);
@@ -47,22 +71,23 @@ public class MovimentacaoDAO extends MyDao {
 		}
 	}
 
-	public List<Movimentacao> getMovimentacoes(ContaTO contaTo) {
+	public List<Movimentacao> getMovimentacoes(ContaTO contaToAtual) {
 		criaConexao();
 		List<Movimentacao> list = new ArrayList<>();
 		String SQL = "SELECT * FROM movimentacao m where m.toNumero = :numero or m.fromNumero = :numero order by m.id desc;";
 		p.prepareNamedParameterStatement(SQL);
 		try{
-			p.setInt("numero", contaTo.getNumero());
+			p.setInt("numero", contaToAtual.getNumero());
 			ResultSet rs = p.executeQuery();
 			while(rs.next()){
 				TipoMovimentacao tipoMovimentacao = TipoMovimentacao.valueOf(rs.getString("tipoMovimentacao"));
 				LocalDateTime data = rs.getTimestamp("date").toLocalDateTime();
 				Conta toConta = new Conta(rs.getInt("toNumero")).carrega();
 				Conta fromConta = new Conta(rs.getInt("fromNumero")).carrega();
+				int id = rs.getInt("id");
 				
-				TipoOperacao tipoOperacao = getTipoOpercao(contaTo.getNumero(), toConta.getNumero(), fromConta.getNumero());
-				MovimentacaoTO movimentacaoTO = new MovimentacaoTO(rs.getInt("id"), new ContaTO(fromConta), tipoOperacao, rs.getString("descricao"), 
+				TipoOperacao tipoOperacao = getTipoOpercao(contaToAtual.getNumero(), toConta.getNumero(), fromConta.getNumero());
+				MovimentacaoTO movimentacaoTO = new MovimentacaoTO(id, new ContaTO(fromConta), tipoOperacao, rs.getString("descricao"), 
 						rs.getBigDecimal("valor"), tipoMovimentacao, new ContaTO(toConta), data);
 				list.add(new Movimentacao(movimentacaoTO));
 			}
@@ -73,11 +98,15 @@ public class MovimentacaoDAO extends MyDao {
 	}
 
 	private TipoOperacao getTipoOpercao(Integer numeroAtual, Integer toNumero, Integer fromNumero) {
-		if(numeroAtual == toNumero){
+		if(toNumero.equals(fromNumero) && numeroAtual.equals(toNumero)){
+			return TipoOperacao.SAIDA;
+		}
+		
+		if(numeroAtual.equals(toNumero)){
 			return TipoOperacao.ENTRADA;
 		} else { 
 			return TipoOperacao.SAIDA;
-		}
+		} 
 	}
 
 }

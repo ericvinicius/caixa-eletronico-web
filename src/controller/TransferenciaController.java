@@ -17,9 +17,10 @@ public class TransferenciaController extends MyController {
 	protected void action(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws ServletException, IOException {
 		BigDecimal valor = new BigDecimal(request.getParameter("valor"));
 		Integer toNumero = new Integer(request.getParameter("conta"));
-		
-		new Movimentacao().deTransferencia(new ContaTO(toNumero), new ContaTO(usuario.getConta()), valor).salva();
-		saveUserOnSession(usuario, request);
+		if(toNumero != usuario.getConta().getNumero()){
+			new Movimentacao().deTransferencia(new ContaTO(toNumero), new ContaTO(usuario.getConta()), valor).salva();
+			saveUserOnSession(usuario, request);
+		}
 		redirectToUser(request, response);
 	}
 
