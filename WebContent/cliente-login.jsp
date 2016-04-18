@@ -20,23 +20,6 @@
 		
 		<div class="container-fluid" style="margin-top: 80px; backgorund: #81DAF5;">
 		</div>
-		<fieldset>
-		<div class="row">
-				<div class="col-md-8 col-md-offset-1" style="text-align: center;"> 
-		<legend>Login</legend>
-		</div>
-		</div>
-		<div class="row">
-				<div class="col-md-8 col-md-offset-1" style="text-align: center;"> 
-	<form action="cliente" method="post">
-		<label>
-			Numero Conta:
-			<input type="text" name="numero" />
-		</label>
-		<input type="submit" value="Logar" />
-	</form>
-	 </div>
-	 </div>
 	
 	
 	<div class="container">
@@ -47,6 +30,9 @@
 							<div class="form-group">
 								<label for="loginTxt">Numero Conta:</label>
 								<input type="text" name="numero" class="form-control" id="loginTxt" placeholder="Numero da conta">
+								<br></br>
+								<label for="loginTxt">Senha:</label>
+								<input type="password" name="senha" class="form-control" id="senha" placeholder="Senha">
 							</div>
 							<div class="alert alert-danger" role="alert" style="display:none;" id="erroLogin"><span class="glyphicon glyphicon-remove"></span> Login ou Senha Inválidos!</div>
 
