@@ -17,6 +17,11 @@ public abstract class MyController {
 		view.forward(request, response);
 	}
 	
+	public static void redirectToLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher view = request.getRequestDispatcher("cliente-login.jsp");
+		view.forward(request, response);
+	}
+
 	protected abstract void action(HttpServletRequest request, HttpServletResponse response, Usuario usuario) throws ServletException, IOException;
 
 	public static void saveUserOnSession(Usuario usuario, HttpServletRequest request) {
@@ -27,6 +32,10 @@ public abstract class MyController {
 	public static Optional<Usuario> getUserOfSession(HttpServletRequest request) {
 		Usuario user = (Usuario) request.getSession().getAttribute("user");
 		return Optional.ofNullable(user);
+	}
+
+	public static void clearSession(HttpServletRequest request){
+		request.getSession().invalidate();
 	}
 
 }

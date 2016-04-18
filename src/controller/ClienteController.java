@@ -20,18 +20,16 @@ public class ClienteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     public ClienteController() {
-        super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Optional<Usuario> userOfSession = MyController.getUserOfSession(request);
 		if(userOfSession.isPresent()){
+			System.out.println("login");
 			doPost(request, response);
 		} else {
-			RequestDispatcher view = request.getRequestDispatcher("cliente-login.jsp");
-			view.forward(request, response);
+			MyController.redirectToLogin(request, response);
 		}
-		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

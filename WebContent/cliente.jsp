@@ -73,7 +73,12 @@
                 <div class="navbar-collapse collapse" id="footer-body">
                     <ul class="nav navbar-nav">
                         <li><a href="#">Sobre</a></li>
-                        <li><a href="cliente-login.jsp">Logout</a></li>
+                        <li>
+				<form action="cliente" method="post">
+					<input type="hidden" name="acao" value="LogoutController" />
+								<input type="submit" value="Logout" />
+							</form>
+						</li>
                         <li><a href="#"></a></li>
                         <li><a href="#"></a></li>
                         <li><a href="#"></a></li>
