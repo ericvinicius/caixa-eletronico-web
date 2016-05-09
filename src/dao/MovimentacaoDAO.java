@@ -19,10 +19,15 @@ public class MovimentacaoDAO extends MyDao {
 
 	public void salva(MovimentacaoTO mTO) {
 		criaConexao();
-		boolean saldoAtualizado = atualizaSaldo(mTO);
-		if(!saldoAtualizado){
-			return;
+		
+		if(saldoFoiAtualizado(mTO)){
+			efetuaMovimentacao(mTO);
 		}
+		
+		fechaConexao();
+	}
+
+	private void efetuaMovimentacao(MovimentacaoTO mTO) {
 		String SQL = "INSERT INTO movimentacao "
 				+ "(fromNumero, descricao, valor, tipoMovimentacao, toNumero, date) "
 				+ "VALUES (:fromNumero, :descricao, :valor, :tipoMovimentacao, :toNumero, :date);";
@@ -40,13 +45,16 @@ public class MovimentacaoDAO extends MyDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		fechaConexao();
 	}
 
-	private boolean atualizaSaldo(MovimentacaoTO mTO) {
+	private boolean saldoFoiAtualizado(MovimentacaoTO mTO) {
+		if(!mTO.getTipoOperacao().equals(TipoOperacao.SAIDA)){
+			return true;
+		}
+		
 		BigDecimal saldoAtual = mTO.getFromConta().getSaldo();
 		BigDecimal valorDaTransferencia = mTO.getValor();
-		if(mTO.getTipoOperacao().equals(TipoOperacao.SAIDA) && saldoAtual.compareTo(valorDaTransferencia) >= 1){
+		if(saldoAtual.compareTo(valorDaTransferencia) >= 1){
 			saldoAtual = saldoAtual.subtract(valorDaTransferencia);
 			String SQL = "UPDATE conta SET saldo=:saldo WHERE numero=:numero;";
 			p.prepareNamedParameterStatement(SQL);
@@ -87,8 +95,8 @@ public class MovimentacaoDAO extends MyDao {
 				int id = rs.getInt("id");
 				
 				TipoOperacao tipoOperacao = getTipoOpercao(contaToAtual.getNumero(), toConta.getNumero(), fromConta.getNumero());
-				MovimentacaoTO movimentacaoTO = new MovimentacaoTO(id, new ContaTO(fromConta), tipoOperacao, rs.getString("descricao"), 
-						rs.getBigDecimal("valor"), tipoMovimentacao, new ContaTO(toConta), data);
+				MovimentacaoTO movimentacaoTO = new MovimentacaoTO(id, fromConta, tipoOperacao, rs.getString("descricao"), 
+						rs.getBigDecimal("valor"), tipoMovimentacao, toConta, data);
 				list.add(new Movimentacao(movimentacaoTO));
 			}
 		}catch(SQLException e){

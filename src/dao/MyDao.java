@@ -25,11 +25,11 @@ public class MyDao {
 			if(rs != null ){
 				rs.close();
 			}
+			if(p != null && stm != null){
+				p.close();
+			}
 			if(stm != null){
 				stm.close();
-			}
-			if(p != null){
-				p.close();
 			}
 			if(connection != null){
 				connection.close();

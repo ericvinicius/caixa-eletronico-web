@@ -3,6 +3,7 @@ package to;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import model.Conta;
 import model.Movimentacao;
 import model.TipoMovimentacao;
 import model.TipoOperacao;
@@ -29,20 +30,20 @@ public class MovimentacaoTO {
 		this.date = mov.getDate();
 	}
 
-	public MovimentacaoTO(Integer id, ContaTO fromConta, TipoOperacao tipoOperacao, String descricao, BigDecimal valor, TipoMovimentacao tipoMovimentacao,
-			ContaTO toConta, LocalDateTime date) {
+	public MovimentacaoTO(Integer id, Conta fromConta, TipoOperacao tipoOperacao, String descricao, BigDecimal valor, TipoMovimentacao tipoMovimentacao,
+			Conta toConta, LocalDateTime date) {
 		setAttributes(fromConta, tipoOperacao, descricao, valor, tipoMovimentacao, toConta, date, id);
 	}
 
-	private void setAttributes(ContaTO fromConta, TipoOperacao tipoOperacao, String descricao,
-			BigDecimal valor, TipoMovimentacao tipoMovimentacao, ContaTO toConta, LocalDateTime date, Integer id) {
+	private void setAttributes(Conta fromConta, TipoOperacao tipoOperacao, String descricao,
+			BigDecimal valor, TipoMovimentacao tipoMovimentacao, Conta toConta, LocalDateTime date, Integer id) {
 		this.tipoMovimentacao = tipoMovimentacao;
 		this.tipoOperacao = tipoOperacao;
 		this.descricao = descricao;
 		this.valor = valor;
 		this.date = date;
-		this.fromConta = fromConta;
-		this.toConta = toConta;
+		this.fromConta = new ContaTO(fromConta);
+		this.toConta = new ContaTO(toConta);
 		this.id = id;
 	}
 
@@ -50,8 +51,8 @@ public class MovimentacaoTO {
 		this.id = id;
 	}
 
-	public MovimentacaoTO(ContaTO fromConta, TipoOperacao tipoOperacao, String descricao, BigDecimal valor, TipoMovimentacao tipoMovimentacao,
-			ContaTO toConta, LocalDateTime date) {
+	public MovimentacaoTO(Conta fromConta, TipoOperacao tipoOperacao, String descricao, BigDecimal valor, TipoMovimentacao tipoMovimentacao,
+			Conta toConta, LocalDateTime date) {
 		setAttributes(fromConta, tipoOperacao, descricao, valor, tipoMovimentacao, toConta, date, null);
 	}
 
